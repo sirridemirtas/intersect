@@ -1,8 +1,9 @@
 const mongoose = require("mongoose")
+const Product = require("./product_model")
 
 const schema = mongoose.Schema({
-	category: { type: String, required: true },
-	amount: { type: Number, required: true },
+	customerId: { type: mongoose.Schema.Types.ObjectId },
+	products: [Product],
 	description: String,
 }, { timestamps: true })
 

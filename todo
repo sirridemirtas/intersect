@@ -1,0 +1,15 @@
+mongodb
+   collections
+      customers: name, surname, [addresses], phone, phone2, email
+      customer_accounts: [orders], [payments: orderID], description
+      customer_orders: customerID, [products: productID, price, qty], discount, amount, description
+      products: name, sku, qty, orderPrice, salePrice, [stock], description
+         [variants: sku, variantName, variantValue, orderPrice, salePrice, [stock], description, [variants]]
+
+      company_accounts:
+
+
+
+/Users/srr/mongodb/bin/mongod --dbpath=/Users/srr/mongodb/db
+
+https://www.loginradius.com/blog/async/Nodejs-and-MongoDb-application-authentication-by-JWT/

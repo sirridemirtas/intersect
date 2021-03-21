@@ -3,13 +3,14 @@ const model = require("../models/customer_model")
 exports.get = (req, res) => {
 	model
 		.findById(req.params.customerId)
-		.then((data) => {
-			res.json(data)
+		.then((customer) => {
+			if (!customer) {
+				res.status(404).json({ message: "Müşteri bulunamadı!" })
+			}
+			res.json(customer)
 		})
 		.catch((err) => {
-			res.statusCode = 404
-
-			res.json({
+			res.status(500).json({
 				message: err
 			})
 		})
@@ -29,22 +30,26 @@ exports.create = (req, res) => {
 		res.statusCode = 201
 		res.json(data)
 	}).catch((err) => {
-		res.statusCode = 400
-		res.json(err)
+		res.status(400).json(err)
 	})
 }
 
 exports.update = (req, res) => {
-	res.send("customer update")
+	model.update(
+		{ _id: req.params._id },
+		{ $set: req.body }
+	).then((data) => {
+		res.status(200).json(data)
+	}).catch((err) => {
+		res.status(400).json(err)
+	})
 }
 
 exports.delete = (req, res) => {
 	model.findOneAndDelete({ _id: req.params.customerId })
 		.then(() => {
-			res.statusCode = 200
 			res.json({ message: "Kullanıcı silindi!" })
 		}).catch((err) => {
-			res.statusCode = 400
-			res.json(err)
+			res.status(400).json(err)
 		})
 }

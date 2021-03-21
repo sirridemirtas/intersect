@@ -6,7 +6,7 @@ for (const route of routes) {
 
 	router[route.type](
 		route.path,
-		require("../controllers/" + controller)[action]
+		require(`../controllers/${controller}`)[action]
 	)
 }
 
