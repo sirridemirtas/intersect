@@ -3,10 +3,10 @@ const mongoose = require("mongoose")
 const schema = mongoose.Schema({
 	name: { type: String, required: true },
 	surname: { type: String, required: true },
-	turkishIdNumber: Number,
-	phone: Number,
+	turkishIdNumber: { type: Number, unique: true, length: 11 },
+	phone: { type: Number, unique: true },
 	address: String,
-	email: String,
+	email: { type: Number, unique: true },
 	notes: String
 }, { timestamps: true })
 

@@ -7,4 +7,4 @@ const schema = mongoose.Schema({
 	description: String,
 }, { timestamps: true })
 
-module.exports = mongoose.model("Expense", schema)
+module.exports = mongoose.model("CustomerOrder", schema)

@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const schema = mongoose.Schema({
 	name: { type: String, required: true },
-	sku: { type: String, required: true },
+	sku: { type: String, required: true, unique: true },
 	costPrice: { type: Number, required: true },
 	salePrice: { type: Number, required: true },
 	stock: { type: Number, default: 0 },

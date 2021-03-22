@@ -1,55 +1,41 @@
-const model = require("../models/customer_model")
+const Customer = require("../models/customer_model")
 
 exports.get = (req, res) => {
-	model
-		.findById(req.params.customerId)
-		.then((customer) => {
+	Customer.findById(req.params.customerId)
+		.then(customer => {
 			if (!customer) {
 				res.status(404).json({ message: "Müşteri bulunamadı!" })
 			}
 			res.json(customer)
 		})
-		.catch((err) => {
-			res.status(500).json({
-				message: err
-			})
-		})
+		.catch((err) => res.status(500).send(err))
 }
 
 exports.getAll = (req, res) => {
-	model.find({}, (err, customers) => {
-		if (err) throw err
-		res.json(customers)
-	})
+	const perPage = parseInt(req.query.limit) || 100
+	const page = parseInt(req.query.page) || 1
+
+	Customer.find({ ...req.query, page: undefined, limit: undefined })
+		.limit(perPage).skip(perPage * (page - 1))
+		.sort({ name: "asc" })
+		.then(customers => res.json(customers))
+		.catch((err) => res.status(500).send(err))
 }
 
 exports.create = (req, res) => {
-	const customer = new model(req.body)
-
-	customer.save().then((data) => {
-		res.statusCode = 201
-		res.json(data)
-	}).catch((err) => {
-		res.status(400).json(err)
-	})
+	new Customer(req.body).save()
+		.then(data => res.status(201).json(data))
+		.catch((err) => res.status(500).send(err))
 }
 
 exports.update = (req, res) => {
-	model.update(
-		{ _id: req.params._id },
-		{ $set: req.body }
-	).then((data) => {
-		res.status(200).json(data)
-	}).catch((err) => {
-		res.status(400).json(err)
-	})
+	Customer.update({ _id: req.params._id }, { $set: req.body })
+		.then(data => res.status(200).json(data))
+		.catch((err) => res.status(500).send(err))
 }
 
 exports.delete = (req, res) => {
-	model.findOneAndDelete({ _id: req.params.customerId })
-		.then(() => {
-			res.json({ message: "Kullanıcı silindi!" })
-		}).catch((err) => {
-			res.status(400).json(err)
-		})
+	Customer.findOneAndDelete({ _id: req.params.customerId })
+		.then(() => res.json({ message: "Kullanıcı silindi!" }))
+		.catch(err => res.status(500).json(err))
 }
