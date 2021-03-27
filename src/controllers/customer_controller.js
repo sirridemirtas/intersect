@@ -12,10 +12,20 @@ exports.get = (req, res) => {
 }
 
 exports.getAll = (req, res) => {
-	const perPage = parseInt(req.query.limit) || 100
+	const perPage = parseInt(req.query.limit) || 50
 	const page = parseInt(req.query.page) || 1
 
-	Customer.find({ ...req.query, page: undefined, limit: undefined })
+	Customer.find({ ...req.query, page: undefined, limit: undefined }
+		/* {
+			$text: {
+				$search: req.query.q,
+				$language: "tr",
+				$caseSensitive: false,
+				$diacriticSensitive: false
+			}
+		} ,
+		{ score: { $meta: "textScore" } }*/
+	)
 		.limit(perPage).skip(perPage * (page - 1))
 		.sort({ name: "asc" })
 		.then(customers => res.json(customers))

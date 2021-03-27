@@ -18,7 +18,7 @@ exports.get = (req, res) => {
 exports.getAll = (req, res) => {
 
 	model.find({})
-		.limit(10)
+		.limit(50)
 		.sort("-createdAt")
 		.select({ name: true, createdAt: true })
 		.then(products => {
@@ -54,5 +54,7 @@ exports.update = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-	res.send("product delele")
+	model.findOneAndDelete({ _id: req.params.productId })
+		.then(() => res.json({ message: "Ürün silindi!" }))
+		.catch(err => res.status(500).json(err))
 }
